@@ -6,8 +6,16 @@
 export const profile = {
   name: 'Jiayi (Chesley) Guo',
   shortName: 'Chesley Guo',
-  title: 'MEng in Development Engineering @ UC Berkeley',
-  focus: 'Data Science · Causal Inference · AI Product',
+  degree: 'MEng in Development Engineering',
+  school: 'UC Berkeley',
+  // cycled by the typewriter in the hero: "I love ___"
+  passions: [
+    'causal inference',
+    'evaluating LLMs',
+    'building AI products',
+    'messy real-world data',
+    'data for social good',
+  ],
   tagline:
     'I turn messy real-world data into evidence for better products and policies, from evaluating LLMs at TikTok to measuring the causal impact of speed cameras with the Oakland Department of Transportation.',
   bio: [
@@ -35,6 +43,16 @@ export const navLinks = [
   { id: 'skills', label: 'Skills' },
   { id: 'honors', label: 'Honors' },
   { id: 'contact', label: 'Contact' },
+];
+
+// "By the Numbers" band; each value animates up from 0 when scrolled into view
+export const stats = [
+  { value: 300, suffix: 'k+', label: 'UK Biobank participants analyzed' },
+  { value: 93.3, decimals: 1, suffix: '%', label: 'Accuracy of my cough-acoustics model' },
+  { value: 800, suffix: '+', label: 'Developers reached at Tencent RTC' },
+  { value: 3, suffix: ' yrs', label: 'Of speed-camera panel data, modeled causally' },
+  { value: 4, label: 'Languages spoken (to varying degrees!)' },
+  { value: 200, suffix: '+', label: 'Hours of volunteer service at UIUC' },
 ];
 
 export const education = [

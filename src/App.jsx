@@ -11,7 +11,19 @@ import {
   skills,
   honors,
   extensionStudy,
+  stats,
 } from './data';
+import {
+  Boop,
+  Counter,
+  HeartButton,
+  Reveal,
+  ScrollProgress,
+  Sparkles,
+  ThemeToggle,
+  Typewriter,
+  WaveDivider,
+} from './components';
 
 /**
  * Jiayi (Chesley) Guo's Portfolio
@@ -50,7 +62,10 @@ function App() {
     const handleScroll = () => {
       const scrollPos = window.scrollY + 100;
       document.querySelectorAll('section').forEach((section) => {
-        if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
+        if (
+          scrollPos >= section.offsetTop &&
+          scrollPos < section.offsetTop + section.offsetHeight
+        ) {
           setActiveSection(section.id);
         }
       });
@@ -104,6 +119,8 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
+
       {/* Navigation Bar */}
       <nav id="navbar">
         <div className="nav-brand">
@@ -124,35 +141,62 @@ function App() {
             </li>
           ))}
         </ul>
-        <button
-          type="button"
-          className={`nav-toggle ${menuOpen ? 'active' : ''}`}
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className="nav-actions">
+          <ThemeToggle />
+          <button
+            type="button"
+            className={`nav-toggle ${menuOpen ? 'active' : ''}`}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </nav>
 
       {/* Hero Section */}
       <section id="home" className="hero">
+        <div className="hero-blobs" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <div className="hero-content">
+          <p className="hero-greeting">
+            Hi there, I&apos;m{' '}
+            <span className="wave-hand" role="img" aria-label="waving hand">
+              👋
+            </span>
+          </p>
           <h1 className="hero-title">{profile.name}</h1>
-          <p className="hero-subtitle">{profile.title}</p>
-          <p className="hero-focus">{profile.focus}</p>
+          <p className="hero-subtitle">
+            {profile.degree} @ <Sparkles>{profile.school}</Sparkles>
+          </p>
+          <p className="hero-focus">
+            I love <Typewriter words={profile.passions} />
+          </p>
           <p className="hero-tagline">{profile.tagline}</p>
           <div className="hero-buttons">
-            <a href="#research" className="btn btn-primary" onClick={(e) => scrollTo(e, 'research')}>
+            <a
+              href="#research"
+              className="btn btn-primary"
+              onClick={(e) => scrollTo(e, 'research')}
+            >
               View My Work
             </a>
-            <a href="#contact" className="btn btn-secondary" onClick={(e) => scrollTo(e, 'contact')}>
+            <a
+              href="#contact"
+              className="btn btn-secondary"
+              onClick={(e) => scrollTo(e, 'contact')}
+            >
               Get In Touch
             </a>
           </div>
         </div>
+        <WaveDivider />
       </section>
 
       {/* About Section */}
@@ -166,15 +210,27 @@ function App() {
               ))}
               <div className="about-details">
                 <div className="detail-item">
-                  <span className="detail-icon">📍</span>
+                  <span className="detail-icon">
+                    <Boop rotation={-15} scale={1.3}>
+                      📍
+                    </Boop>
+                  </span>
                   <span>{profile.location}</span>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-icon">✉️</span>
+                  <span className="detail-icon">
+                    <Boop rotation={15} scale={1.3}>
+                      ✉️
+                    </Boop>
+                  </span>
                   <a href={`mailto:${profile.email}`}>{profile.email}</a>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-icon">💼</span>
+                  <span className="detail-icon">
+                    <Boop y={-4} scale={1.3}>
+                      💼
+                    </Boop>
+                  </span>
                   <a href={profile.linkedin} target="_blank" rel="noreferrer">
                     linkedin.com/in/jg1023
                   </a>
@@ -196,16 +252,37 @@ function App() {
 
           <h3 className="subsection-title">Education</h3>
           <div className="education-grid">
-            {education.map((edu) => (
-              <div key={edu.school} className="education-card">
-                <div className="card-row">
-                  <h4>{edu.school}</h4>
-                  <span className="card-date">{edu.date}</span>
+            {education.map((edu, i) => (
+              <Reveal key={edu.school} delay={i * 120}>
+                <div className="education-card">
+                  <div className="card-row">
+                    <h4>{edu.school}</h4>
+                    <span className="card-date">{edu.date}</span>
+                  </div>
+                  <p className="card-role">{edu.degree}</p>
+                  <p className="card-meta">{edu.detail}</p>
+                  <p className="card-meta">GPA: {edu.gpa} / 4.0</p>
                 </div>
-                <p className="card-role">{edu.degree}</p>
-                <p className="card-meta">{edu.detail}</p>
-                <p className="card-meta">GPA: {edu.gpa} / 4.0</p>
-              </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* By the Numbers */}
+      <section id="numbers" className="section section-band">
+        <div className="container">
+          <h2>By the Numbers</h2>
+          <div className="stats-grid">
+            {stats.map((stat, i) => (
+              <Reveal key={stat.label} delay={i * 80}>
+                <div className="stat">
+                  <span className="stat-value">
+                    <Counter value={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+                  </span>
+                  <span className="stat-label">{stat.label}</span>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -217,7 +294,7 @@ function App() {
           <h2>Experience</h2>
           <div className="timeline">
             {experience.map((job) => (
-              <div key={job.company} className="timeline-item">
+              <Reveal key={job.company} className="timeline-item">
                 <div className="card-row">
                   <h3 className="timeline-company">{job.company}</h3>
                   <span className="card-date">{job.date}</span>
@@ -232,7 +309,7 @@ function App() {
                     <li key={point.slice(0, 32)}>{point}</li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -257,31 +334,38 @@ function App() {
           </div>
 
           <div className="projects-grid">
-            {visibleResearch.map((project) => (
-              <div key={project.title} className={`project-card ${project.featured ? 'featured' : ''}`}>
-                <div className="project-content">
-                  <div className="project-header">
-                    <span className="project-category">{categoryLabel(project.category)}</span>
-                    <span className="card-date">{project.date}</span>
+            {visibleResearch.map((project, i) => (
+              <Reveal key={project.title} delay={(i % 3) * 100}>
+                <div className={`project-card ${project.featured ? 'featured' : ''}`}>
+                  <div className="project-content">
+                    <div className="project-header">
+                      <span className="project-category">{categoryLabel(project.category)}</span>
+                      <span className="card-date">{project.date}</span>
+                    </div>
+                    <h3 className="project-title">{project.title}</h3>
+                    <p className="project-org">{project.org}</p>
+                    <p className="card-meta">{project.role}</p>
+                    <p className="project-description">{project.description}</p>
+                    <div className="project-tags">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="project-tag">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        className="project-link"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Learn more →
+                      </a>
+                    )}
                   </div>
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-org">{project.org}</p>
-                  <p className="card-meta">{project.role}</p>
-                  <p className="project-description">{project.description}</p>
-                  <div className="project-tags">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="project-tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  {project.link && (
-                    <a href={project.link} className="project-link" target="_blank" rel="noreferrer">
-                      Learn more →
-                    </a>
-                  )}
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -292,20 +376,26 @@ function App() {
         <div className="container">
           <h2>Skills & Tools</h2>
           <div className="skills-grid">
-            {skills.map((skill) => (
-              <div key={skill.group} className="skill-card">
-                <div className="skill-header">
-                  <span className="skill-icon">{skill.icon}</span>
-                  <h3 className="skill-name">{skill.group}</h3>
-                </div>
-                <div className="skill-items">
-                  {skill.items.map((item) => (
-                    <span key={item} className="skill-item">
-                      {item}
+            {skills.map((skill, i) => (
+              <Reveal key={skill.group} delay={(i % 3) * 100}>
+                <div className="skill-card">
+                  <div className="skill-header">
+                    <span className="skill-icon">
+                      <Boop rotation={20} scale={1.25}>
+                        {skill.icon}
+                      </Boop>
                     </span>
-                  ))}
+                    <h3 className="skill-name">{skill.group}</h3>
+                  </div>
+                  <div className="skill-items">
+                    {skill.items.map((item) => (
+                      <span key={item} className="skill-item">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -342,8 +432,9 @@ function App() {
           <h2>Get In Touch</h2>
           <div className="contact-content">
             <p>
-              I&apos;m looking for full-time data science and AI product roles starting January 2027.
-              Feel free to reach out about opportunities, research collaborations, or just to say hello!
+              I&apos;m looking for full-time data science and AI product roles starting January
+              2027. Feel free to reach out about opportunities, research collaborations, or just to
+              say hello!
             </p>
 
             <form id="contact-form" className="contact-form" onSubmit={handleFormSubmit} noValidate>
@@ -358,7 +449,9 @@ function App() {
                     className={fieldClass('name')}
                     onChange={handleInputChange}
                   />
-                  {touched.name && errors.name && <span className="error-message">{errors.name}</span>}
+                  {touched.name && errors.name && (
+                    <span className="error-message">{errors.name}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -371,7 +464,9 @@ function App() {
                     className={fieldClass('email')}
                     onChange={handleInputChange}
                   />
-                  {touched.email && errors.email && <span className="error-message">{errors.email}</span>}
+                  {touched.email && errors.email && (
+                    <span className="error-message">{errors.email}</span>
+                  )}
                 </div>
 
                 <div className="form-group form-group-full">
@@ -405,7 +500,9 @@ function App() {
                     Send Message
                   </button>
                   {sent && (
-                    <div className="success-message">Thanks for reaching out! Your email app should open now.</div>
+                    <div className="success-message">
+                      Thanks for reaching out! Your email app should open now.
+                    </div>
                   )}
                 </div>
               </div>
@@ -418,7 +515,10 @@ function App() {
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
-            <p>&copy; {new Date().getFullYear()} {profile.name}. All rights reserved.</p>
+            <HeartButton />
+            <p>
+              &copy; {new Date().getFullYear()} {profile.name}. All rights reserved.
+            </p>
             <div className="social-links">
               {socials.map(({ label, url }) => (
                 <a
